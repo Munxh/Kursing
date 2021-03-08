@@ -1,13 +1,11 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 
-export const Card = () => {
-
-    const width = Dimensions.get('window').width * 0.5;
+export const Card = ({ width }) => {
 
     return (
-        <View style={[styles.card, { width, height: width + 200 }]}>
+        <View style={[styles.card, { width, height: width }]}>
             <Text>
                 Test
             </Text>
@@ -18,6 +16,9 @@ export const Card = () => {
 const styles = StyleSheet.create({
     card: {
         backgroundColor: 'red',
-        margin: 10
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 10,
+        borderRadius: 5,
     }
 });
