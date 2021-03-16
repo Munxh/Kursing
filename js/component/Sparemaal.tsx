@@ -1,8 +1,9 @@
-import React, {useRef, useState} from 'react';
-import {Dimensions, FlatList, View, StyleSheet, Image, Animated} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Dimensions, FlatList, View, StyleSheet, Image, Animated, TouchableOpacity, Text } from 'react-native';
 import { Card } from './Card';
-import {Indicator} from './ScrollIndicator';
+import { Indicator } from './ScrollIndicator';
 import LinearGradient from 'react-native-linear-gradient';
+import { SharedElement } from 'react-navigation-shared-element';
 
 const ITEM_WIDTH = Dimensions.get('window').width * 0.7;
 const screenWidth = Dimensions.get('window').width;
@@ -21,7 +22,7 @@ const Backdrop = ({ scrollX }) => {
             <FlatList
                 data={images}
                 horizontal
-                renderItem={({item, index}) => {
+                renderItem={({ item, index }) => {
                     const translateX = scrollX.interpolate({
                         inputRange: [(images.length - index - 1) * ITEM_WIDTH, (images.length - index) * ITEM_WIDTH],
                         outputRange: [screenWidth, 0],
@@ -64,40 +65,49 @@ const Backdrop = ({ scrollX }) => {
     );
 };
 
-export const Sparemaal = () => {
+export const Sparemaal = ({ navigation }) => {
     const [index, setIndex] = useState(0);
     const scrollX = useRef(new Animated.Value(0)).current;
 
     const cards = [1, 2, 3, 4, 5];
 
     const renderCards = ({ index, item }) => {
-        return <Card width={ITEM_WIDTH}/>;
+        return (
+            <TouchableOpacity onPress={() => navigation.navigate('SparemaalInfoScreen', { id: index.toString() })}>
+                <View style={[styles.card, { width: ITEM_WIDTH, height: ITEM_WIDTH }]}>
+                    <SharedElement id={index.toString()}>
+                        <Text style={styles.header}>
+                            Test
+                        </Text>
+                    </SharedElement>
+                </View>
+            </TouchableOpacity>);
     };
 
     return (
         <>
             <View style={styles.container}>
-            <Backdrop scrollX={scrollX} />
+                <Backdrop scrollX={scrollX}/>
                 <Animated.FlatList
-                          data={cards}
-                          bounces={false}
-                          decelerationRate={0}
-                          scrollEventThrottle={16}
-                          horizontal
-                          showsHorizontalScrollIndicator={false}
-                          contentContainerStyle={{ alignItems: 'center' }}
-                          renderItem={renderCards}
-                          // onScroll={event => setIndex(Math.round(event.nativeEvent.contentOffset.x / width))}
-                           onScroll={Animated.event(
-                                   [{nativeEvent: {contentOffset: {x: scrollX}}}],
-                                   {useNativeDriver: false},
-                               )}
-                          snapToInterval={ITEM_WIDTH}
-                          snapToAlignment="start"
+                    data={cards}
+                    bounces={false}
+                    decelerationRate={0}
+                    scrollEventThrottle={16}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ alignItems: 'center' }}
+                    renderItem={renderCards}
+                    // onScroll={event => setIndex(Math.round(event.nativeEvent.contentOffset.x / width))}
+                    onScroll={Animated.event(
+                        [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                        { useNativeDriver: false },
+                    )}
+                    snapToInterval={ITEM_WIDTH}
+                    snapToAlignment="start"
                 />
             </View>
             <View style={styles.indicatorContainer}>
-                <Indicator totalAmount={cards.length} selected={index} />
+                <Indicator totalAmount={cards.length} selected={index}/>
             </View>
         </>
     );
@@ -110,5 +120,16 @@ const styles = StyleSheet.create({
     indicatorContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    card: {
+        backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 10,
+        borderRadius: 5,
+    },
+    header: {
+        fontSize: 25,
+        alignSelf: 'center',
     },
 });

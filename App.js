@@ -12,51 +12,79 @@ import {StyleSheet} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Sparemaal} from './js/component/Sparemaal';
 
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {createAppContainer} from 'react-navigation';
+import {SparemaalInfoScreen} from './js/component/SparemaalInfoScreen';
+
+const stackNavigator = createSharedElementStackNavigator(
+    {
+        Sparemaal: {
+            screen: Sparemaal
+        },
+        SparemaalInfoScreen: {
+            screen: SparemaalInfoScreen,
+            navigationOptions: () => {
+                return {
+                    transitionSpec: {
+                        open: { animation: 'timing', config: {duration: 1000}},
+                        close: { animation: 'timing', config: {duration: 1000}},
+                    }
+                };
+            },
+        },
+    },
+    {
+        initialRouteName: 'Sparemaal',
+        headerMode: 'none',
+    },
+);
+
+const AppContainer = createAppContainer(stackNavigator);
+
 const App: () => React$Node = () => {
-  return (
-    <>
-      <Sparemaal />
-    </>
-  );
+
+    return (
+        <AppContainer/>
+    );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+    scrollView: {
+        backgroundColor: Colors.lighter,
+    },
+    engine: {
+        position: 'absolute',
+        right: 0,
+    },
+    body: {
+        backgroundColor: Colors.white,
+    },
+    sectionContainer: {
+        marginTop: 32,
+        paddingHorizontal: 24,
+    },
+    sectionTitle: {
+        fontSize: 24,
+        fontWeight: '600',
+        color: Colors.black,
+    },
+    sectionDescription: {
+        marginTop: 8,
+        fontSize: 18,
+        fontWeight: '400',
+        color: Colors.dark,
+    },
+    highlight: {
+        fontWeight: '700',
+    },
+    footer: {
+        color: Colors.dark,
+        fontSize: 12,
+        fontWeight: '600',
+        padding: 4,
+        paddingRight: 12,
+        textAlign: 'right',
+    },
 });
 
 export default App;
