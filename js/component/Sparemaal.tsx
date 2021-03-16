@@ -72,13 +72,23 @@ export const Sparemaal = ({ navigation }) => {
     const cards = [1, 2, 3, 4, 5];
 
     const renderCards = ({ index, item }) => {
+        console.log(index)
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('SparemaalInfoScreen', { id: index.toString() })}>
+            <TouchableOpacity onPress={() => navigation.navigate('SparemaalInfoScreen', { id: index.toString(), idBottomText: `${index}-bottomText`,
+                idView: `${index}-view` })}>
                 <View style={[styles.card, { width: ITEM_WIDTH, height: ITEM_WIDTH }]}>
                     <SharedElement id={index.toString()}>
                         <Text style={styles.header}>
                             Test
                         </Text>
+                    </SharedElement>
+                    <SharedElement id={`${index}-bottomText`}>
+                        <Text style={styles.header}>
+                            BottomText
+                        </Text>
+                    </SharedElement>
+                    <SharedElement id={`${index}-view`} style={{ width: '100%', height: '100%', zIndex: -5, position: 'absolute'}}>
+                    <View style={{ width: '100%', height: '100%', zIndex: -5, backgroundColor: 'yellow', position: 'absolute' }}/>
                     </SharedElement>
                 </View>
             </TouchableOpacity>);
