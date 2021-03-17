@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Animated } from 'react-native';
 import { SharedElement } from 'react-navigation-shared-element';
 
 
@@ -9,6 +9,7 @@ export const SparemaalInfoScreen = ({ navigation }) => {
     const idBottomText = navigation.getParam('idBottomText');
     const idImage = navigation.getParam('idImage');
     const index = navigation.getParam('index');
+    const mountedAnimated = useRef(new Animated.Value(0)).current;
     const images = [
         require('../../assets/sparemaal_baresparer_default_A.jpg'),
         require('../../assets/sparemaal_baresparer_default_B.jpg'),
@@ -17,17 +18,29 @@ export const SparemaalInfoScreen = ({ navigation }) => {
         require('../../assets/sparemaal_baresparer_default_A.jpg'),
     ].reverse();
 
+    const animation = (toValue, delay) => (
+        Animated.timing(mountedAnimated, {
+            toValue,
+            duration: 500,
+            delay,
+            useNativeDriver: true,
+        }));
+
+    useEffect(() => {
+        animation(1, 800).start();
+    });
+
     return (
         <TouchableOpacity onPress={() => navigation.pop()} style={{ width: '100%', height: '100%' }}>
             <Image
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        position: 'absolute',
-                        zIndex: -10
-                    }}
-                    source={images[images.length - index]}
-                />
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    zIndex: -10,
+                }}
+                source={images[images.length - index]}
+            />
             <View style={{
                 marginTop: '60%',
             }}>
@@ -42,15 +55,17 @@ export const SparemaalInfoScreen = ({ navigation }) => {
                         BottomText
                     </Text>
                 </SharedElement>
-                <Text style={styles.text}>
-                    This is some more text that should ease in
-                </Text>
-                <Text style={styles.text}>
-                    moreText
-                </Text>
-                <Text style={styles.text}>
-                    moreText
-                </Text>
+                <Animated.View style={{ opacity: mountedAnimated}}>
+                    <Text style={styles.text}>
+                        This is some more text that should ease in
+                    </Text>
+                    <Text style={styles.text}>
+                        moreText
+                    </Text>
+                    <Text style={styles.text}>
+                        moreText
+                    </Text>
+                </Animated.View>
             </View>
             <SharedElement id={idView}
                            style={{ width: '100%', height: '80%', zIndex: -5, position: 'absolute', bottom: 0 }}>

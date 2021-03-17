@@ -1,8 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Dimensions, FlatList, View, StyleSheet, Image, Animated, TouchableOpacity, Text } from 'react-native';
-import { Card } from './Card';
+import { Animated, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Indicator } from './ScrollIndicator';
-import LinearGradient from 'react-native-linear-gradient';
 import { SharedElement } from 'react-navigation-shared-element';
 import { SparemaalInfoScreen } from './SparemaalInfoScreen';
 
