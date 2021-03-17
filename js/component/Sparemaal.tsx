@@ -21,7 +21,7 @@ const Backdrop = ({ scrollX }) => {
         require('../../assets/sparemaal_baresparer_default_A.jpg'),
     ].reverse();
     return (
-        <View style={{ position: 'absolute', top: 0, width: screenWidth, height: screenHeight }}>
+        <View style={{ position: 'absolute', width: screenWidth, height: screenHeight }}>
             <FlatList
                 data={images}
                 horizontal
@@ -55,15 +55,6 @@ const Backdrop = ({ scrollX }) => {
                     );
                 }}
             />
-            <LinearGradient
-                colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'white']}
-                style={{
-                    height: backdropHeight,
-                    width: screenWidth,
-                    position: 'absolute',
-                    bottom: 0,
-                }}
-            />
         </View>
     );
 };
@@ -73,12 +64,13 @@ export const Sparemaal = ({ navigation }) => {
         const scrollX = useRef(new Animated.Value(0)).current;
 
         const cards = [{ key: 'left-spacer' }, 1, 2, 3, 4, 5, { key: 'right-spacer' }];
-
+        const indexChange = (e) => {
+            setIndex(Math.round((e.nativeEvent.contentOffset.x)/ ITEM_WIDTH));
+        };
         const renderCards = ({ index, item }) => {
             if (index === 0 || index === cards.length-1) {
                 return (<View style={{width: spacerWidth, backgroundColor: 'red'}}/>);
             }
-            console.log(index)
             return (
                 <TouchableOpacity onPress={() => navigation.navigate('SparemaalInfoScreen', {
                     id: index.toString(), idBottomText: `${index}-bottomText`,
@@ -102,7 +94,7 @@ export const Sparemaal = ({ navigation }) => {
                                 height: '100%',
                                 zIndex: -5,
                                 padding: 20,
-                                backgroundColor: 'yellow',
+                                backgroundColor: 'white',
                                 position: 'absolute',
                                 borderRadius: 10,
                             }}/>
@@ -121,21 +113,25 @@ export const Sparemaal = ({ navigation }) => {
                         decelerationRate={0}
                         scrollEventThrottle={16}
                         horizontal
+                        style={{ marginTop: '70%'}}
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={{ alignItems: 'center' }}
                         renderItem={renderCards}
-                        // onScroll={event => setIndex(Math.round(event.nativeEvent.contentOffset.x / width))}
-                        onScroll={Animated.event(
-                            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                            { useNativeDriver: false },
-                        )}
+                        onScroll={
+                            Animated.event(
+                                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                                { useNativeDriver: false,
+                                    listener: event => indexChange(event)},
+                            )
+                        }
                         snapToInterval={ITEM_WIDTH}
                         snapToAlignment="start"
                     />
                 </View>
                 <View style={styles.indicatorContainer}>
-                    <Indicator totalAmount={cards.length} selected={index}/>
+                    <Indicator totalAmount={cards.length-2} selected={index}/>
                 </View>
+                <View style={{ position: 'absolute', backgroundColor: 'white', bottom: 0, height: 80, width: screenWidth}}/>
             </>
         );
     }

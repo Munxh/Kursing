@@ -42,6 +42,15 @@ export const SparemaalInfoScreen = ({ navigation }) => {
                         BottomText
                     </Text>
                 </SharedElement>
+                <Text style={styles.text}>
+                    This is some more text that should ease in
+                </Text>
+                <Text style={styles.text}>
+                    moreText
+                </Text>
+                <Text style={styles.text}>
+                    moreText
+                </Text>
             </View>
             <SharedElement id={idView}
                            style={{ width: '100%', height: '80%', zIndex: -5, position: 'absolute', bottom: 0 }}>
@@ -49,8 +58,8 @@ export const SparemaalInfoScreen = ({ navigation }) => {
                     width: '100%',
                     height: '100%',
                     zIndex: -15,
-                    borderRadius: 20,
-                    backgroundColor: 'yellow',
+                    borderRadius: 25,
+                    backgroundColor: 'white',
                     position: 'absolute',
                 }}/>
             </SharedElement>
@@ -80,6 +89,12 @@ const styles = StyleSheet.create({
         height: '100%',
     }, header: {
         fontSize: 25,
+        zIndex: 15,
+        alignSelf: 'center',
+    },
+    text: {
+        fontSize: 20,
+        marginTop: 20,
         zIndex: 15,
         alignSelf: 'center',
     },

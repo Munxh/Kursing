@@ -33,8 +33,8 @@ const stackNavigator = createSharedElementStackNavigator(
             navigationOptions: () => {
                 return {
                     transitionSpec: {
-                        open: { animation: 'timing', config: {duration: 1000}},
-                        close: { animation: 'timing', config: {duration: 1000}},
+                        open: { animation: 'timing', config: {duration: 800}},
+                        close: { animation: 'timing', config: {duration: 800}},
                     },
                     cardStyleInterpolator: forFade
                 };
