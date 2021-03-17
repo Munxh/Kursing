@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Animated } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Animated, ScrollView, RefreshControl } from 'react-native';
 import { SharedElement } from 'react-navigation-shared-element';
 
 
@@ -30,8 +30,13 @@ export const SparemaalInfoScreen = ({ navigation }) => {
         animation(1, 800).start();
     });
 
+    const goBack = () => {
+        navigation.pop();
+    };
+
+
     return (
-        <TouchableOpacity onPress={() => navigation.pop()} style={{ width: '100%', height: '100%' }}>
+        <>
             <Image
                 style={{
                     width: '100%',
@@ -41,44 +46,52 @@ export const SparemaalInfoScreen = ({ navigation }) => {
                 }}
                 source={images[images.length - index]}
             />
-            <View style={{
-                marginTop: '60%',
-            }}>
-
-                <SharedElement id={id} style={{ zIndex: 10 }}>
-                    <Text style={styles.header}>
-                        Test
-                    </Text>
-                </SharedElement>
-                <SharedElement id={idBottomText} style={{ zIndex: 10 }}>
-                    <Text style={styles.header}>
-                        BottomText
-                    </Text>
-                </SharedElement>
-                <Animated.View style={{ opacity: mountedAnimated}}>
-                    <Text style={styles.text}>
-                        This is some more text that should ease in
-                    </Text>
-                    <Text style={styles.text}>
-                        moreText
-                    </Text>
-                    <Text style={styles.text}>
-                        moreText
-                    </Text>
-                </Animated.View>
-            </View>
-            <SharedElement id={idView}
-                           style={{ width: '100%', height: '80%', zIndex: -5, position: 'absolute', bottom: 0 }}>
+            <ScrollView refreshControl={<RefreshControl
+                tintColor="transparent" // iOS
+                refreshing={false}
+                onRefresh={goBack}
+                progressBackgroundColor={'transparent'}
+            />} style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}
+                        contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{
-                    width: '100%',
-                    height: '100%',
-                    zIndex: -15,
-                    borderRadius: 25,
-                    backgroundColor: 'white',
-                    position: 'absolute',
-                }}/>
-            </SharedElement>
-        </TouchableOpacity>
+                    marginTop: '60%',
+                }}>
+
+                    <SharedElement id={id} style={{ zIndex: 10 }}>
+                        <Text style={styles.header}>
+                            Test
+                        </Text>
+                    </SharedElement>
+                    <SharedElement id={idBottomText} style={{ zIndex: 10 }}>
+                        <Text style={styles.header}>
+                            BottomText
+                        </Text>
+                    </SharedElement>
+                    <Animated.View style={{ opacity: mountedAnimated }}>
+                        <Text style={styles.text}>
+                            This is some more text that should ease in
+                        </Text>
+                        <Text style={styles.text}>
+                            moreText
+                        </Text>
+                        <Text style={styles.text}>
+                            moreText
+                        </Text>
+                    </Animated.View>
+                </View>
+                <SharedElement id={idView}
+                               style={{ width: '100%', height: '80%', zIndex: -5, position: 'absolute', bottom: 0 }}>
+                    <View style={{
+                        width: '100%',
+                        height: '100%',
+                        zIndex: -15,
+                        borderRadius: 25,
+                        backgroundColor: 'white',
+                        position: 'absolute',
+                    }}/>
+                </SharedElement>
+            </ScrollView>
+        </>
     );
 };
 
