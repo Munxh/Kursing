@@ -42,6 +42,7 @@ export const SparemaalInfoScreen = ({ navigation }) => {
     });
 
     const goBack = () => {
+        animation(0, 0).start();
         navigation.pop();
     };
     const onSwipeDown = event => {
