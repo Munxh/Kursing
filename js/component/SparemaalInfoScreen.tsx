@@ -33,6 +33,12 @@ export const SparemaalInfoScreen = ({ navigation }) => {
     const goBack = () => {
         navigation.pop();
     };
+    const onSwipeDown = event => {
+        console.log(event.nativeEvent.contentOffset.y);
+        if (event.nativeEvent.contentOffset.y < 200) { // you can replace zero with needed threshold
+            goBack(); //your refresh function
+        }
+    };
 
 
     return (
@@ -46,12 +52,7 @@ export const SparemaalInfoScreen = ({ navigation }) => {
                 }}
                 source={images[images.length - index]}
             />
-            <ScrollView refreshControl={<RefreshControl
-                tintColor="transparent" // iOS
-                refreshing={false}
-                onRefresh={goBack}
-                progressBackgroundColor={'transparent'}
-            />} style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}
+            <ScrollView onScroll={onSwipeDown} style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}
                         contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{
                     marginTop: '60%',
