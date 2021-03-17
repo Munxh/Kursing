@@ -26,7 +26,7 @@ const Backdrop = ({ scrollX }) => {
                 renderItem={({ item, index }) => {
                     const translateX = scrollX.interpolate({
                         inputRange: [(images.length - index - 1) * ITEM_WIDTH, (images.length - index) * ITEM_WIDTH],
-                        outputRange: [screenWidth, 0],
+                        outputRange: [screenWidth, -10],
                         // i revers:
                         // inputRange: [(index - 1) * ITEM_WIDTH, index * ITEM_WIDTH],
                         // outputRange: [0, screenWidth],
