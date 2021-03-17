@@ -4,11 +4,13 @@ import { Card } from './Card';
 import { Indicator } from './ScrollIndicator';
 import LinearGradient from 'react-native-linear-gradient';
 import { SharedElement } from 'react-navigation-shared-element';
+import { SparemaalInfoScreen } from './SparemaalInfoScreen';
 
 const ITEM_WIDTH = Dimensions.get('window').width * 0.7;
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const backdropHeight = Dimensions.get('window').height * 0.6;
+const spacerWidth = (screenWidth - ITEM_WIDTH) / 2;
 
 const Backdrop = ({ scrollX }) => {
     const images = [
@@ -16,6 +18,7 @@ const Backdrop = ({ scrollX }) => {
         require('../../assets/sparemaal_baresparer_default_B.jpg'),
         require('../../assets/sparemaal_baresparer_default_C.jpg'),
         require('../../assets/sparemaal_baresparer_default_D.jpg'),
+        require('../../assets/sparemaal_baresparer_default_A.jpg'),
     ].reverse();
     return (
         <View style={{ position: 'absolute', top: 0, width: screenWidth, height: screenHeight }}>
@@ -66,62 +69,77 @@ const Backdrop = ({ scrollX }) => {
 };
 
 export const Sparemaal = ({ navigation }) => {
-    const [index, setIndex] = useState(0);
-    const scrollX = useRef(new Animated.Value(0)).current;
+        const [index, setIndex] = useState(0);
+        const scrollX = useRef(new Animated.Value(0)).current;
 
-    const cards = [1, 2, 3, 4, 5];
+        const cards = [{ key: 'left-spacer' }, 1, 2, 3, 4, 5, { key: 'right-spacer' }];
 
-    const renderCards = ({ index, item }) => {
-        console.log(index)
+        const renderCards = ({ index, item }) => {
+            if (index === 0 || index === cards.length-1) {
+                return (<View style={{width: spacerWidth, backgroundColor: 'red'}}/>);
+            }
+            console.log(index)
+            return (
+                <TouchableOpacity onPress={() => navigation.navigate('SparemaalInfoScreen', {
+                    id: index.toString(), idBottomText: `${index}-bottomText`,
+                    idView: `${index}-view`, idImage: `${index}-image`, index: index,
+                })} style={{ width: ITEM_WIDTH}}>
+                    <View style={[styles.card]}>
+                        <SharedElement id={index.toString()} style={{ zIndex: 10 }}>
+                            <Text style={styles.header}>
+                                Test
+                            </Text>
+                        </SharedElement>
+                        <SharedElement id={`${index}-bottomText`}>
+                            <Text style={styles.header}>
+                                BottomText
+                            </Text>
+                        </SharedElement>
+                        <SharedElement id={`${index}-view`}
+                                       style={{ width: '100%', height: '100%', zIndex: -15, position: 'absolute' }}>
+                            <View style={{
+                                width: '100%',
+                                height: '100%',
+                                zIndex: -5,
+                                padding: 20,
+                                backgroundColor: 'yellow',
+                                position: 'absolute',
+                                borderRadius: 10,
+                            }}/>
+                        </SharedElement>
+                    </View>
+                </TouchableOpacity>);
+        };
+
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('SparemaalInfoScreen', { id: index.toString(), idBottomText: `${index}-bottomText`,
-                idView: `${index}-view` })}>
-                <View style={[styles.card, { width: ITEM_WIDTH, height: ITEM_WIDTH }]}>
-                    <SharedElement id={index.toString()}>
-                        <Text style={styles.header}>
-                            Test
-                        </Text>
-                    </SharedElement>
-                    <SharedElement id={`${index}-bottomText`}>
-                        <Text style={styles.header}>
-                            BottomText
-                        </Text>
-                    </SharedElement>
-                    <SharedElement id={`${index}-view`} style={{ width: '100%', height: '100%', zIndex: -5, position: 'absolute'}}>
-                    <View style={{ width: '100%', height: '100%', zIndex: -5, backgroundColor: 'yellow', position: 'absolute' }}/>
-                    </SharedElement>
+            <>
+                <View style={styles.container}>
+                    <Backdrop scrollX={scrollX}/>
+                    <Animated.FlatList
+                        data={cards}
+                        bounces={false}
+                        decelerationRate={0}
+                        scrollEventThrottle={16}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ alignItems: 'center' }}
+                        renderItem={renderCards}
+                        // onScroll={event => setIndex(Math.round(event.nativeEvent.contentOffset.x / width))}
+                        onScroll={Animated.event(
+                            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                            { useNativeDriver: false },
+                        )}
+                        snapToInterval={ITEM_WIDTH}
+                        snapToAlignment="start"
+                    />
                 </View>
-            </TouchableOpacity>);
-    };
-
-    return (
-        <>
-            <View style={styles.container}>
-                <Backdrop scrollX={scrollX}/>
-                <Animated.FlatList
-                    data={cards}
-                    bounces={false}
-                    decelerationRate={0}
-                    scrollEventThrottle={16}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ alignItems: 'center' }}
-                    renderItem={renderCards}
-                    // onScroll={event => setIndex(Math.round(event.nativeEvent.contentOffset.x / width))}
-                    onScroll={Animated.event(
-                        [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                        { useNativeDriver: false },
-                    )}
-                    snapToInterval={ITEM_WIDTH}
-                    snapToAlignment="start"
-                />
-            </View>
-            <View style={styles.indicatorContainer}>
-                <Indicator totalAmount={cards.length} selected={index}/>
-            </View>
-        </>
-    );
-};
+                <View style={styles.indicatorContainer}>
+                    <Indicator totalAmount={cards.length} selected={index}/>
+                </View>
+            </>
+        );
+    }
+;
 
 const styles = StyleSheet.create({
     container: {
@@ -135,11 +153,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
-        borderRadius: 5,
+        marginHorizontal: 10,
+        borderRadius: 20,
+        height: ITEM_WIDTH,
     },
     header: {
         fontSize: 25,
+        zIndex: 15,
         alignSelf: 'center',
     },
 });

@@ -7,34 +7,37 @@ export const SparemaalInfoScreen = ({ navigation }) => {
     const id = navigation.getParam('id');
     const idView = navigation.getParam('idView');
     const idBottomText = navigation.getParam('idBottomText');
+    const idImage = navigation.getParam('idImage');
+    const index = navigation.getParam('index');
     const images = [
         require('../../assets/sparemaal_baresparer_default_A.jpg'),
         require('../../assets/sparemaal_baresparer_default_B.jpg'),
         require('../../assets/sparemaal_baresparer_default_C.jpg'),
         require('../../assets/sparemaal_baresparer_default_D.jpg'),
+        require('../../assets/sparemaal_baresparer_default_A.jpg'),
     ].reverse();
 
     return (
         <TouchableOpacity onPress={() => navigation.pop()} style={{ width: '100%', height: '100%' }}>
             <Image
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    zIndex: -10,
-                }}
-                source={images[1]}
-            />
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        zIndex: -10
+                    }}
+                    source={images[images.length - index]}
+                />
             <View style={{
-                marginTop: '20%',
+                marginTop: '60%',
             }}>
 
-                <SharedElement id={id}>
+                <SharedElement id={id} style={{ zIndex: 10 }}>
                     <Text style={styles.header}>
                         Test
                     </Text>
                 </SharedElement>
-                <SharedElement id={idBottomText}>
+                <SharedElement id={idBottomText} style={{ zIndex: 10 }}>
                     <Text style={styles.header}>
                         BottomText
                     </Text>
@@ -45,7 +48,8 @@ export const SparemaalInfoScreen = ({ navigation }) => {
                 <View style={{
                     width: '100%',
                     height: '100%',
-                    zIndex: -5,
+                    zIndex: -15,
+                    borderRadius: 20,
                     backgroundColor: 'yellow',
                     position: 'absolute',
                 }}/>
@@ -54,12 +58,17 @@ export const SparemaalInfoScreen = ({ navigation }) => {
     );
 };
 
+
 SparemaalInfoScreen.sharedElements = (navigation) => {
     const item = navigation.getParam('id');
     const idBottomText = navigation.getParam('idBottomText');
     const idView = navigation.getParam('idView');
-    return [{ id: `${item}`, animation: 'fade' }, { id: `${idBottomText}`, animation: 'fade' }, {
-        id: idView,
+    const idImage = navigation.getParam('idImage');
+    return [{ id: idView, animation: 'fade' }, {
+        id: item,
+        animation: 'move',
+    }, {
+        id: idBottomText,
         animation: 'move',
     }];
 };
@@ -71,6 +80,7 @@ const styles = StyleSheet.create({
         height: '100%',
     }, header: {
         fontSize: 25,
+        zIndex: 15,
         alignSelf: 'center',
     },
 });

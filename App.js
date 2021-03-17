@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {Animated, Easing, StyleSheet} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Sparemaal} from './js/component/Sparemaal';
@@ -15,11 +15,18 @@ import {Sparemaal} from './js/component/Sparemaal';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {createAppContainer} from 'react-navigation';
 import {SparemaalInfoScreen} from './js/component/SparemaalInfoScreen';
+import {transitionConfig} from './js/transitionConfig';
+
+const forFade = ({ current }) => ({
+    cardStyle: {
+        opacity: current.progress,
+    },
+});
 
 const stackNavigator = createSharedElementStackNavigator(
     {
         Sparemaal: {
-            screen: Sparemaal
+            screen: Sparemaal,
         },
         SparemaalInfoScreen: {
             screen: SparemaalInfoScreen,
@@ -28,7 +35,8 @@ const stackNavigator = createSharedElementStackNavigator(
                     transitionSpec: {
                         open: { animation: 'timing', config: {duration: 1000}},
                         close: { animation: 'timing', config: {duration: 1000}},
-                    }
+                    },
+                    cardStyleInterpolator: forFade
                 };
             },
         },
