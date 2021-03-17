@@ -1,5 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Animated, ScrollView, RefreshControl } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    Image,
+    Animated,
+    ScrollView,
+    RefreshControl,
+    Dimensions,
+} from 'react-native';
 import { SharedElement } from 'react-navigation-shared-element';
 
 
@@ -9,6 +19,7 @@ export const SparemaalInfoScreen = ({ navigation }) => {
     const idBottomText = navigation.getParam('idBottomText');
     const idImage = navigation.getParam('idImage');
     const index = navigation.getParam('index');
+    const heightOfScreen = Dimensions.get('window').height;
     const mountedAnimated = useRef(new Animated.Value(0)).current;
     const images = [
         require('../../assets/sparemaal_baresparer_default_A.jpg'),
@@ -35,7 +46,7 @@ export const SparemaalInfoScreen = ({ navigation }) => {
     };
     const onSwipeDown = event => {
         console.log(event.nativeEvent.contentOffset.y);
-        if (event.nativeEvent.contentOffset.y < 200) { // you can replace zero with needed threshold
+        if (event.nativeEvent.contentOffset.y < -0.5) { // you can replace zero with needed threshold
             goBack(); //your refresh function
         }
     };
